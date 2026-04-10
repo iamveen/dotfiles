@@ -50,6 +50,61 @@ stow/git/.gitconfig   →   ~/.gitconfig
 stow/shell/.bashrc    →   ~/.bashrc
 ```
 
+Run stow to activate all packages:
+
+```bash
+cd ~/.dotfiles/stow && stow --target ~ .
+```
+
+## Stow Usage
+
+### Add a new config file
+
+1. Create a package directory with the relative path to `$HOME`
+2. Add your config file
+3. Stow the package
+
+```bash
+mkdir -p stow/git
+echo '[core]
+    editor = vim' > stow/git/.gitconfig
+cd stow && stow git
+```
+
+### Add an entire folder
+
+Same structure — the directory name becomes the parent in `$HOME`:
+
+```bash
+mkdir -p stow/awesome-wm/.config/awesome
+cp ~/.config/awesome/*.lua stow/awesome/.config/awesome/
+cd stow && stow awesome-wm
+```
+
+### Remove a config while keeping it tracked
+
+```bash
+cd stow && stow -D git    # deletes ~/.gitconfig symlink
+```
+
+The file stays in the repo so you can re-stow it later.
+
+### Start tracking an existing config
+
+1. Back up the existing file
+2. Move it into your stow package
+3. Stow the package (re-creates the symlink)
+
+```bash
+cp ~/.gitconfig stow/git/.gitconfig
+rm   ~/.gitconfig
+cd stow && stow git
+```
+
+If you're stowing the package for the first time, you can skip the `rm` —
+stow will refuse to overwrite unless you use `-D` on a previous unstow
+or pass `-R` to restow.
+
 ## Testing
 
 The `test/` folder spins up a Docker container that mirrors your host
@@ -61,7 +116,7 @@ safely iterate on playbooks.
 ./test/test.sh run            # Rebuild + ephemeral interactive shell
 ./test/test.sh start          # Rebuild + start detached container
 ./test/test.sh exec [cmd...]  # Exec into running container (auto-starts)
-./test/test.sh stop           # Force stop and remove
+./test/test.sh stop           # Force stop and remove container
 ```
 
 ## Multi-Distro Plan

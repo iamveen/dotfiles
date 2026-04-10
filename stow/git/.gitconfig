@@ -1,0 +1,10 @@
+[user]
+    name = Your Name
+    email = your@email.tld
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = vim
+    autocrlf = input
