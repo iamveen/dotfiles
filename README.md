@@ -53,7 +53,7 @@ stow/shell/.bashrc    →   ~/.bashrc
 Run stow to activate all packages:
 
 ```bash
-cd ~/.dotfiles/stow && stow --target ~ .
+(cd ~/.dotfiles/stow && stow --target ~ *)
 ```
 
 ## Stow Usage

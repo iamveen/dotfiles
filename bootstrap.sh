@@ -59,8 +59,12 @@ run_stow() {
         echo "No stow/ directory found, skipping symlink step."
         return
     fi
+    if [[ -z "$(ls -A "$SCRIPT_DIR/stow")" ]]; then
+        echo "stow/ directory is empty, skipping symlink step."
+        return
+    fi
     echo "Symlinking dotfiles with stow..."
-    (cd "$SCRIPT_DIR/stow" && stow --target ~ .)
+    (cd "$SCRIPT_DIR/stow" && stow --target ~ *)
 }
 
 # ── Main ─────────────────────────────────────────────────────────────────
