@@ -1,2 +1,13 @@
+[env]
+PATH               = "{{env.HOME}}/bin:{{env.PATH}}"
+OPENSPEC_TELEMETRY = 0
+
+# Secrets go in config.local.toml (gitignored)
+# OPENROUTER_API_KEY = "{{env.OPENROUTER_API_KEY}}"
+
 [tools]
+fd = "latest"
 node = "24"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@mariozechner/pi-coding-agent" = "latest"
+ripgrep = "latest"

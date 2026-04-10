@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Pre-commit hook: scan for potential secrets in staged files
+
+set -euo pipefail
+
+# Patterns to detect potential secrets
+patterns=(
+    'sk-[a-zA-Z0-9]{20,}'              # API keys (OpenAI, etc)
+    '(api[_-]?key|apikey)[[:space:]]*[=:][[:space:]]*["\']?[^"\'\s]+'
+    '(password|passwd|pwd)[[:space:]]*[=:][[:space:]]*["\']?[^"\'\s]+'
+    '(secret|private_key|token)[[:space:]]*[=:][[:space:]]*["\']?[^"\'\s]+'
+    '[a-zA-Z0-9_-]*_TOKEN[[:space:]]*[=:][[:space:]]*["\']?[^"\'\s]+'
+    'https?://[^/]+:[^/]+@'             # URLs with embedded credentials
+)
+
+# Build regex
+regex=$(IFS='|'; echo "${patterns[*]}")
+
+# Get staged files (excluding deleted)
+staged_files=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
+
+if [[ -z "$staged_files" ]]; then
+    exit 0
+fi
+
+found_secrets=0
+
+for file in $staged_files; do
+    # Skip the hook itself and binary files
+    [[ "$file" == *.git/hooks/* ]] && continue
+    git diff --cached --no-ext-diff "$file" 2>/dev/null | grep -E '^[+]' | grep -vE '^[+]{3}' | grep -iE "$regex" >/dev/null 2>&1 && {
+        echo "⚠️  Potential secret detected in: $file"
+        git diff --cached --no-ext-diff "$file" | grep -E '^[+]' | grep -vE '^[+]{3}' | grep --color=always -iE "$regex" || true
+        echo ""
+        found_secrets=1
+    }
+done
+
+if [[ "$found_secrets" -eq 1 ]]; then
+    echo "❌ Commit blocked: potential secrets detected."
+    echo ""
+    echo "Remediation options:"
+    echo "  1. Move secrets to .local.toml, .env.local, or shell environment"
+    echo "  2. Use 'git add --patch' to exclude specific lines"
+    echo "  3. Add file to .gitignore if it shouldn't be tracked"
+    echo "  4. Run 'git commit --no-verify' to bypass this check (not recommended)"
+    exit 1
+fi
+
+exit 0

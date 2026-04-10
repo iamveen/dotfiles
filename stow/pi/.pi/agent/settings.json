@@ -1,0 +1,12 @@
+{
+  "lastChangelogVersion": "0.66.1",
+  "enabledModels": [
+    "openrouter/qwen/qwen3.6-plus",
+    "openrouter/moonshotai/kimi-k2.5",
+    "openrouter/minimax/minimax-m2.7",
+    "openrouter/google/gemma-4-26b-a4b-it:free",
+    "openrouter/stepfun/step-3.5-flash:free"
+  ],
+  "defaultProvider": "openrouter",
+  "defaultModel": "moonshotai/kimi-k2.5"
+}
