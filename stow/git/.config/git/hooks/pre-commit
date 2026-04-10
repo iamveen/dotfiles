@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
-# Pre-commit hook: scan for potential secrets using gitleaks
+# Pre-commit hook: scan staged changes for secrets using gitleaks
 
 set -euo pipefail
 
 if command -v gitleaks &>/dev/null; then
-    # Run gitleaks detect on the staged changes only
-    if ! gitleaks detect --source . --staged --no-git --report-format json --report-path /tmp/gitleaks-report.json 2>&1; then
+    # Use gitleaks --pipe to scan only staged changes
+    # --log-level=warn suppresses the banner and only shows findings
+    if ! git diff --cached | gitleaks detect --pipe --log-level=warn --report-format=json --report-path=/tmp/gitleaks-report.json 2>&1; then
         echo ""
         echo "❌ Commit blocked: gitleaks detected potential secrets."
         echo ""
-        echo "Details saved to /tmp/gitleaks-report.json"
+        echo "Details:"
+        cat /tmp/gitleaks-report.json 2>/dev/null | python3 -m json.tool 2>/dev/null || cat /tmp/gitleaks-report.json 2>/dev/null || true
         echo ""
         echo "Remediation options:"
         echo "  1. Remove the secret from your changes"
@@ -19,7 +21,8 @@ if command -v gitleaks &>/dev/null; then
         exit 1
     fi
 else
-    echo "⚠️  gitleaks not found. Install it or run 'mise install' to set up your environment."
+    echo "⚠️  gitleaks not found in PATH."
+    echo "    Install it or run 'mise install' to set up your environment."
     echo "    Fallback: committing without secret detection."
     echo "    (Bypass this warning with 'git commit --no-verify')"
 fi
