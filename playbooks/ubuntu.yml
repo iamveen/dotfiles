@@ -1,0 +1,9 @@
+- name: Ubuntu base setup
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install stow
+      apt:
+        name: stow
+        state: present

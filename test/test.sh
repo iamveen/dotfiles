@@ -14,12 +14,21 @@ Usage: $(basename "$0") <command>
 
 Commands:
   build              Build the Docker image
-  run                Rebuild image and run interactive ephemeral container
+  run [cmd...]       Rebuild image and run interactive ephemeral container
   start              Rebuild image and start a detached background container
   exec [cmd...]      Exec into the running container (starts if needed)
   stop               Force stop and remove the container
   help               Show this help message
 EOF
+}
+
+# Determine Docker TTY flags based on whether stdout is a terminal
+_docker_tty() {
+    if [[ -t 1 ]]; then
+        echo "-it"
+    else
+        echo "-i"
+    fi
 }
 
 cmd_build() {
@@ -28,9 +37,17 @@ cmd_build() {
 
 cmd_run() {
     cmd_build
-    docker run --rm -it \
-        -v "$DOTFILES_DIR":/home/"$(id -un)"/.dotfiles \
-        "$IMAGE"
+    local tty_flags
+    tty_flags="$(_docker_tty)"
+    if [[ $# -gt 0 ]]; then
+        docker run --rm $tty_flags \
+            -v "$DOTFILES_DIR":/home/"$(id -un)"/.dotfiles \
+            "$IMAGE" "$@"
+    else
+        docker run --rm $tty_flags \
+            -v "$DOTFILES_DIR":/home/"$(id -un)"/.dotfiles \
+            "$IMAGE"
+    fi
 }
 
 cmd_start() {
@@ -46,7 +63,6 @@ cmd_exec() {
         cmd_start
     fi
 
-    # Only allocate TTY when stdout is a terminal
     local tty_flag=""
     [[ -t 1 ]] && tty_flag="-t"
 
@@ -63,7 +79,7 @@ shift || true
 
 case "$command" in
     build) cmd_build ;;
-    run)   cmd_run ;;
+    run)   cmd_run "$@" ;;
     start) cmd_start ;;
     exec)  cmd_exec "$@" ;;
     stop)  cmd_stop ;;
