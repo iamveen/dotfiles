@@ -1,31 +1,26 @@
 # Agent Instructions for dotfiles
 
-## Pre-Commit: Secret Detection
+## Secret Detection with Gitleaks
 
-Before every commit, check staged files for potential secrets.
+A pre-commit hook in `stow/git/.config/git/hooks/pre-commit` runs `gitleaks detect --staged` to catch secrets before they're committed.
 
-### What to scan for
-- API keys (patterns like `sk-`, `api_key`, `apikey`, `api-key`)
-- Tokens containing `_TOKEN`, `SECRET`, `PASSWORD`, `PRIVATE_KEY`
-- High-entropy strings that look like secrets
-- URLs with embedded credentials (`https://user:pass@...`)
-
-### Files to ignore
-- `.pi/AGENT.md` itself
-- Documentation examples using placeholder values
-- Test fixtures explicitly designed as examples
-
-### If secrets are found
+### If gitleaks finds secrets
 **DO NOT commit.** Instead:
 1. Warn the user about the detected potential secret
-2. Show the file and line where it was found
+2. Show `cat /tmp/gitleaks-report.json` for details
 3. Suggest remediation steps:
-   - Move secrets to `.local.toml`, `.env.local`, or shell environment
-   - Use `git add --patch` to exclude the sensitive line if appropriate
-   - Add to `.gitignore` if the file should never be tracked
+   - Remove the secret from your changes
+   - Add false-positive allowlist rules to `.gitleaks.toml`
+   - Use `git add --patch` to exclude specific lines
+   - Run `git commit --no-verify` to bypass (not recommended)
 
-### If no secrets found
-Proceed with the commit as normal.
+### If gitleaks is not installed
+Install it via `mise install` or commit without detection (warn the user).
+
+### Manual scan
+```bash
+gitleaks detect --source . --staged --no-git
+```
 
 ## Repository Structure
 

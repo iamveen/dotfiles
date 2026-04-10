@@ -8,5 +8,5 @@
     "openrouter/stepfun/step-3.5-flash:free"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "moonshotai/kimi-k2.5"
+  "defaultModel": "qwen/qwen3.6-plus"
 }
