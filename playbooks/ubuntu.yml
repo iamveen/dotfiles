@@ -3,6 +3,23 @@
   become: true
 
   tasks:
+    - name: Install system prerequisites
+      apt:
+        name:
+          - git
+          - curl
+          - build-essential
+          - unzip
+          - unattended-upgrades
+        state: present
+        update_cache: yes
+
+    - name: Enable unattended upgrades
+      systemd:
+        name: unattended-upgrades
+        enabled: yes
+        state: started
+
     - name: Install stow
       apt:
         name: stow

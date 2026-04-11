@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Resolve symlinks to find the real script location, then walk up to find stow/
+find_root() {
+    local dir
+    dir="$(cd "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+    while [[ ! -d "$dir/stow" ]]; do
+        dir="$(cd "$dir/.." && pwd)"
+        if [[ "$dir" == "/" ]]; then
+            echo "Error: dotfiles repo not found" >&2
+            exit 1
+        fi
+    done
+    echo "$dir/stow"
+}
+
+main() {
+    local stow_dir
+    stow_dir="$(find_root)"
+
+    local modules
+    if [[ $# -eq 0 ]]; then
+        modules=($(ls -d "$stow_dir"/*/ | xargs -n1 basename))
+    else
+        modules=("$@")
+    fi
+
+    echo "Stowing: ${modules[*]}"
+    (cd "$stow_dir" && stow --verbose 2 --target ~ "${modules[@]}")
+}
+
+main "$@"
