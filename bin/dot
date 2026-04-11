@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export PATH="~/.local/bin:${PATH}"
+
 # ── Repo discovery ───────────────────────────────────────────────────────
 # Resolve symlinks so this works whether in PATH or run directly.
 find_root() {
