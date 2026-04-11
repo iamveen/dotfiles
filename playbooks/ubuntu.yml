@@ -13,6 +13,8 @@
           - unattended-upgrades
           - tree
           - entr
+          - pkg-config
+          - libssl-dev
         state: present
         update_cache: yes
 
@@ -32,6 +34,35 @@
       ansible.builtin.shell: curl https://mise.run | sh
       args:
         creates: "~/.local/bin/mise"
+
+    # ── Fish shell ──────────────────────────────────────────────────────────
+    - name: Add Fish PPA
+      ansible.builtin.apt_repository:
+        repo: ppa:fish-shell/release-4
+        state: present
+        update_cache: yes
+
+    - name: Install fish
+      apt:
+        name: fish
+        state: present
+
+    # ── Nushell ─────────────────────────────────────────────────────────────
+    - name: Add Nushell GPG key
+      ansible.builtin.shell: wget -qO- https://apt.fury.io/nushell/gpg.key | gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
+      args:
+        creates: /etc/apt/keyrings/fury-nushell.gpg
+
+    - name: Add Nushell apt repository
+      ansible.builtin.apt_repository:
+        repo: deb [signed-by=/etc/apt/keyrings/fury-nushell.gpg] https://apt.fury.io/nushell/ /
+        state: present
+        update_cache: yes
+
+    - name: Install nushell
+      apt:
+        name: nushell
+        state: present
 
     # ── Docker ───────────────────────────────────────────────────────────────
     - name: Install Docker prerequisites

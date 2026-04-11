@@ -18,6 +18,7 @@ node = "24"
 ripgrep = "latest"
 ruby = "3"
 rust = "latest"
+tmux = "latest"
 tokei = "latest"
 
 [settings.ruby]
