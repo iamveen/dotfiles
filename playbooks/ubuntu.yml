@@ -27,12 +27,9 @@
 
     - name: Install mise
       become: false
-      ansible.builtin.shell: |
-        if ! command -v mise &>/dev/null; then
-          curl https://mise.run | sh
-        fi
+      ansible.builtin.shell: curl https://mise.run | sh
       args:
-        creates: "{{ ansible_facts['user_dir'] }}/.local/bin/mise"
+        creates: "~/.local/bin/mise"
 
     # ── Docker ───────────────────────────────────────────────────────────────
     - name: Install Docker prerequisites
