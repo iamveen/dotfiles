@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ── Repo discovery ───────────────────────────────────────────────────────
+# Resolve symlinks so this works whether in PATH or run directly.
+find_root() {
+    local dir
+    dir="$(cd "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+    while [[ ! -d "$dir/playbooks" ]]; do
+        dir="$(cd "$dir/.." && pwd)"
+        if [[ "$dir" == "/" ]]; then
+            echo "Error: dotfiles repo not found" >&2
+            exit 1
+        fi
+    done
+    echo "$dir"
+}
+
+# ── Platform detection ───────────────────────────────────────────────────
+detect_platform() {
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian)  echo "ubuntu" ;;
+            alpine)         echo "alpine" ;;
+            arch)           echo "arch" ;;
+            *)              echo "unknown" ;;
+        esac
+    elif [[ "$(uname)" == "Darwin" ]]; then
+        echo "macos"
+    else
+        echo "unknown"
+    fi
+}
+
+# ── Subcommands ──────────────────────────────────────────────────────────
+cmd_pre() {
+    echo "─── Installing prerequisites ───"
+    if command -v apt-get &>/dev/null; then
+        export DEBIAN_FRONTEND=noninteractive
+        sudo apt-get -qq update
+        sudo apt-get -qq install -y curl sudo >/dev/null 2>&1
+    elif command -v apk &>/dev/null; then
+        sudo apk add --no-cache curl sudo >/dev/null 2>&1
+    elif command -v brew &>/dev/null; then
+        true
+    fi
+
+    if ! command -v uv &>/dev/null; then
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    fi
+}
+
+cmd_ansible() {
+    local root
+    root="$(find_root)"
+
+    local platform="${1:-$(detect_platform)}"
+    local playbook="$root/playbooks/${platform}.yml"
+
+    if [[ ! -f "$playbook" ]]; then
+        echo "Error: no playbook for platform '$platform'" >&2
+        echo "Available: $(ls "$root/playbooks" 2>/dev/null | sed 's/\.yml$//' | tr '\n' ' ')" >&2
+        exit 1
+    fi
+
+    echo "─── Running Ansible: $playbook ───"
+    uvx --from ansible-core ansible-playbook -c local -i localhost, "$playbook"
+}
+
+cmd_stow() {
+    local root
+    root="$(find_root)"
+    local stow_dir="$root/stow"
+
+    local modules
+    if [[ $# -eq 0 ]]; then
+        modules=($(ls -d "$stow_dir"/*/ | xargs -n1 basename))
+    else
+        modules=("$@")
+    fi
+
+    echo "─── Restowing: ${modules[*]} ───"
+    (cd "$stow_dir" && stow --verbose 2 --target ~ --restow "${modules[@]}")
+}
+
+cmd_boot() {
+    local platform
+    platform="$(detect_platform)"
+    echo "Detected platform: $platform"
+
+    cmd_pre
+    cmd_ansible "$platform"
+    cmd_stow
+}
+
+# ── Dispatch ─────────────────────────────────────────────────────────────
+usage() {
+    cat <<EOF
+Usage: dot <command> [args...]
+
+Commands:
+  pre       Install minimal prerequisites (curl, sudo, uv)
+  ansible   Run the Ansible playbook for the current platform
+  stow      Ensure stowed dotfiles are symlinked
+  boot      Full bootstrap: pre → ansible → stow
+EOF
+}
+
+main() {
+    local cmd="${1:-}"
+    if [[ -z "$cmd" ]]; then
+        usage
+        exit 1
+    fi
+    shift
+
+    case "$cmd" in
+        pre|ansible|stow|boot) "cmd_$cmd"    "$@" ;;
+        -h|--help|help) usage; exit 0        ;;
+        *) echo "Unknown command: $cmd" >&2; usage >&2; exit 1 ;;
+    esac
+}
+
+main "$@"

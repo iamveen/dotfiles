@@ -1,5 +1,5 @@
 [env]
-PATH               = "{{env.HOME}}/bin:{{env.PATH}}"
+_.path = ["{{env.HOME}}/.dotfiles/bin"]
 OPENSPEC_TELEMETRY = 0
 
 # Secrets go in config.local.toml (gitignored)
