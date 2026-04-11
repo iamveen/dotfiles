@@ -9,9 +9,14 @@ OPENSPEC_TELEMETRY = 0
 delta = "latest"
 fd = "latest"
 fzf = "latest"
+"gem:try-cli" = "latest"
 gitleaks = "latest"
 jq = "latest"
 node = "24"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@mariozechner/pi-coding-agent" = "latest"
 ripgrep = "latest"
+ruby = "3"
+
+[settings.ruby]
+compile = false
