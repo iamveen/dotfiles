@@ -6,8 +6,11 @@ OPENSPEC_TELEMETRY = 0
 # OPENROUTER_API_KEY = "{{env.OPENROUTER_API_KEY}}"
 
 [tools]
+delta = "latest"
 fd = "latest"
+fzf = "latest"
 gitleaks = "latest"
+jq = "latest"
 node = "24"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@mariozechner/pi-coding-agent" = "latest"
