@@ -17,6 +17,8 @@ node = "24"
 "npm:@mariozechner/pi-coding-agent" = "latest"
 ripgrep = "latest"
 ruby = "3"
+rust = "latest"
+tokei = "latest"
 
 [settings.ruby]
 compile = false

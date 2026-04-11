@@ -11,6 +11,8 @@
           - build-essential
           - unzip
           - unattended-upgrades
+          - tree
+          - entr
         state: present
         update_cache: yes
 
