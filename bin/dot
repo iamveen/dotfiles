@@ -71,19 +71,87 @@ cmd_ansible() {
 }
 
 cmd_stow() {
+    local sub="${1:-}"
+
+    case "$sub" in
+        restow) shift; cmd_stow_restow "$@" ;;
+        add)    shift; cmd_stow_add "$@" ;;
+        "")     cmd_stow_restow ;;
+        *)      echo "Unknown stow subcommand: $sub" >&2; _stow_usage >&2; exit 1 ;;
+    esac
+}
+
+cmd_stow_restow() {
     local root
     root="$(find_root)"
     local stow_dir="$root/stow"
 
-    local modules
     if [[ $# -eq 0 ]]; then
-        modules=($(ls -d "$stow_dir"/*/ | xargs -n1 basename))
+        local modules=($(ls -d "$stow_dir"/*/ | xargs -n1 basename))
     else
-        modules=("$@")
+        local modules=("$@")
     fi
 
     echo "─── Restowing: ${modules[*]} ───"
     (cd "$stow_dir" && stow --verbose 2 --target ~ --restow "${modules[@]}")
+}
+
+cmd_stow_add() {
+    if [[ $# -lt 2 ]]; then
+        echo "Usage: dot stow add <module> <path> [more paths...]" >&2
+        exit 1
+    fi
+
+    local root
+    root="$(find_root)"
+    local stow_dir="$root/stow"
+    local home
+    home="$(eval echo ~${SUDO_USER:-$USER})"
+
+    local module="$1"; shift
+    local module_dir="$stow_dir/$module"
+
+    for src in "$@"; do
+        # Strip absolute path prefix to get path relative to $HOME
+        local rel="${src#$HOME/}"
+        # If the path wasn't under $HOME (still absolute), try with expanded ~
+        if [[ "$rel" == "$src" ]]; then
+            # Fallback: just use basename (old behavior) — warn but continue
+            rel="$(basename "$src")"
+            echo "Warning: $src is not under $HOME, using basename: $rel" >&2
+        fi
+
+        local parent
+        parent="$(dirname "$rel")"
+        local basename
+        basename="$(basename "$src")"
+
+        local dest_dir="$module_dir"
+        if [[ "$parent" != "." ]]; then
+            dest_dir="$module_dir/$parent"
+        fi
+
+        if [[ -e "$dest_dir/$basename" ]]; then
+            echo "Error: $dest_dir/$basename already exists" >&2
+            continue
+        fi
+
+        mkdir -p "$dest_dir"
+        echo "─── Moving $src → $dest_dir/ ───"
+        mv "$src" "$dest_dir/"
+    done
+
+    cmd_stow_restow "$module"
+}
+
+_stow_usage() {
+    cat <<EOF
+Usage: dot stow <subcommand> [args...]
+
+Subcommands:
+  restow [modules...]  Restow dotfile modules (all if none given)
+  add <module> <path>  Create a new stow module and move files into it
+EOF
 }
 
 cmd_boot() {
@@ -104,7 +172,9 @@ Usage: dot <command> [args...]
 Commands:
   pre       Install minimal prerequisites (curl, sudo, uv)
   ansible   Run the Ansible playbook for the current platform
-  stow      Ensure stowed dotfiles are symlinked
+  stow      Manage dotfile stow modules
+            restow [modules...]  Restow modules (all if none given)
+            add <module> <path>  Create a module and move files into it
   boot      Full bootstrap: pre → ansible → stow
 EOF
 }
