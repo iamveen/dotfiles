@@ -47,6 +47,11 @@
         name: fish
         state: present
 
+    - name: Set fish as default shell for the current user
+      ansible.builtin.user:
+        name: "{{ lookup('env', 'USER') }}"
+        shell: /usr/bin/fish
+
     # ── Nushell ─────────────────────────────────────────────────────────────
     - name: Add Nushell GPG key
       ansible.builtin.shell: wget -qO- https://apt.fury.io/nushell/gpg.key | gpg --dearmor -o /etc/apt/keyrings/fury-nushell.gpg
