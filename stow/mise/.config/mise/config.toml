@@ -6,20 +6,50 @@ OPENSPEC_TELEMETRY = 0
 # OPENROUTER_API_KEY = "{{env.OPENROUTER_API_KEY}}"
 
 [tools]
-delta = "latest"
-fd = "latest"
-fzf = "latest"
-"gem:try-cli" = "latest"
-gitleaks = "latest"
-jq = "latest"
+# Languages / Runtimes
 node = "24"
-"npm:@anthropic-ai/claude-code" = "latest"
-"npm:@mariozechner/pi-coding-agent" = "latest"
-ripgrep = "latest"
 ruby = "3"
 rust = "latest"
+
+# Core CLI Tools
+bat = "latest"
+delta = "latest"
+eza = "latest"
+fd = "latest"
+jq = "latest"
+ripgrep = "latest"
+tree-sitter = "latest"
+
+# Terminal & TUI Apps
+atuin = "latest"
+btop = "latest"
+fzf = "latest"
+lazydocker = "latest"
+lazygit = "latest"
+lazyjournal = "latest"
+neovim = "latest"
 tmux = "latest"
+yazi = "latest"
+
+# Git & Version Control
+git-cliff = "latest"
+gitleaks = "latest"
+jj = "latest"
+
+# Security & Analysis
+lychee = "latest"
 tokei = "latest"
+trivy = "latest"
+vale = "latest"
+
+# Markdown & Writing
+glow = "latest"
+mermaid-ascii = "latest"
+
+# Language Packages (npm, gem)
+"gem:try-cli" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@mariozechner/pi-coding-agent" = "latest"
 
 [settings.ruby]
 compile = false

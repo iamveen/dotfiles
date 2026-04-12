@@ -8,5 +8,7 @@
     "openrouter/stepfun/step-3.5-flash:free"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "qwen/qwen3.6-plus"
+  "defaultModel": "qwen/qwen3.6-plus",
+  "hideThinkingBlock": false,
+  "defaultThinkingLevel": "high"
 }
