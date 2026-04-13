@@ -1,3 +1,6 @@
+fish_add_path ~/.local/bin
+
 if status is-interactive
-  ~/.local/bin/mise activate fish | source
+  mise activate fish | source
+  try init ~/playground | source
 end

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# pbcopy — Copy to clipboard using ANSI OSC 52 sequence
+#
+# Reads stdin, base64-encodes it, and writes an OSC 52 escape sequence
+# to copy the data to the system clipboard. Works in tmux and plain terminals.
+#
+# Usage:
+#   echo "text" | pbcopy
+#   cat file.txt | pbcopy
+#
+# OSC 52 sequence format:
+#   \033]52;c;<base64>\a
+#   In tmux: \033Ptmux;\033\033]52;c;<base64>\a\033\\
+
+input=$(cat)
+encoded=$(printf '%s' "$input" | base64 | tr -d '\n')
+if [ -n "$TMUX" ]; then
+    printf '\033Ptmux;\033\033]52;c;%s\a\033\\' "$encoded"
+else
+    printf '\033]52;c;%s\a' "$encoded"
+fi

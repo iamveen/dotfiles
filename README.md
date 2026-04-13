@@ -3,41 +3,56 @@
 Bootstrap a new development environment from scratch.
 
 ```
-git clone → bootstrap → done
+git clone → dot boot → done
 ```
 
 ## Quick Start
 
 ```bash
 git clone https://github.com/user/dotfiles.git ~/.dotfiles
-~/.dotfiles/bootstrap.sh
+~/.dotfiles/bin/dot boot
 ```
 
-`bootstrap.sh` does three things:
+`dot boot` does three things:
 
-1. **Install prerequisites** — the bare minimum to run `uvx`
+1. **Install prerequisites** — curl, sudo, and `uv` via the `dot pre` command
 2. **Run Ansible** — provisions the system (packages, tools, services) via `uvx ansible`
-3. **Symlink configs** — uses `stow` (installed by Ansible) to link dotfiles from this repo into your `$HOME`
+3. **Symlink configs** — uses `stow` to link dotfiles from this repo into your `$HOME`
+
+## CLI
+
+```
+dot <command>
+
+Commands:
+  pre       Install minimal prerequisites (curl, sudo, uv)
+  ansible   Run the Ansible playbook for the current platform
+  stow      Manage dotfile stow modules
+            restow [modules...]  Restow modules (all if none given)
+            add <module> <path>  Create a module and move files into it
+  boot      Full bootstrap: pre → ansible → stow
+```
 
 ## File Layout
 
 ```
 ~/.dotfiles/
-├── bootstrap.sh            # Entry point: deps → ansible (installs stow) → symlink dotfiles
-├── README.md               # This file
-├── ansible.cfg             # Ansible configuration
+├── bin/
+│   ├── dot                 # Main CLI entry point
+│   └── pbcopy              # Helper script
 ├── playbooks/
-│   └── ubuntu.yml          # Ubuntu system setup (single file)
+│   └── ubuntu.yml          # Ubuntu system setup
 ├── stow/                   # Dotfile packages for stow
+│   ├── fish/
 │   ├── git/
-│   │   └── .gitconfig
-│   ├── shell/
-│   │   ├── .bashrc
-│   │   └── .inputrc
-│   └── ...
-└── test/                   # Docker sandbox for testing
-    ├── Dockerfile
-    └── test.sh
+│   ├── mise/
+│   └── pi/
+├── test/                   # Docker sandbox for testing
+│   ├── Dockerfile
+│   └── test.sh
+├── AGENT.md                # Agent instructions
+├── ansible.cfg             # Ansible configuration
+└── README.md               # This file
 ```
 
 ### How `stow/` works
@@ -47,63 +62,44 @@ relative to `~/.dotfiles/stow/PACKAGE` into your `$HOME`:
 
 ```
 stow/git/.gitconfig   →   ~/.gitconfig
-stow/shell/.bashrc    →   ~/.bashrc
-```
-
-Run stow to activate all packages:
-
-```bash
-(cd ~/.dotfiles/stow && stow --target ~ *)
+stow/mise/.config/mise.toml → ~/.config/mise.toml
 ```
 
 ## Stow Usage
 
+### Restow all modules
+
+```bash
+dot stow restow
+```
+
+### Restow specific modules
+
+```bash
+dot stow restow git fish
+```
+
 ### Add a new config file
 
-1. Create a package directory with the relative path to `$HOME`
-2. Add your config file
-3. Stow the package
-
 ```bash
-mkdir -p stow/git
-echo '[core]
-    editor = vim' > stow/git/.gitconfig
-cd stow && stow git
+dot stow add <module> <path>
 ```
 
-### Add an entire folder
-
-Same structure — the directory name becomes the parent in `$HOME`:
+For example, to track an existing file:
 
 ```bash
-mkdir -p stow/awesome-wm/.config/awesome
-cp ~/.config/awesome/*.lua stow/awesome/.config/awesome/
-cd stow && stow awesome-wm
+dot stow add git ~/.gitconfig
 ```
+
+This moves `~/.gitconfig` → `stow/git/.gitconfig` and symlinks it back.
 
 ### Remove a config while keeping it tracked
 
 ```bash
-cd stow && stow -D git    # deletes ~/.gitconfig symlink
+stow -D git    # deletes ~/.gitconfig symlink
 ```
 
 The file stays in the repo so you can re-stow it later.
-
-### Start tracking an existing config
-
-1. Back up the existing file
-2. Move it into your stow package
-3. Stow the package (re-creates the symlink)
-
-```bash
-cp ~/.gitconfig stow/git/.gitconfig
-rm   ~/.gitconfig
-cd stow && stow git
-```
-
-If you're stowing the package for the first time, you can skip the `rm` —
-stow will refuse to overwrite unless you use `-D` on a previous unstow
-or pass `-R` to restow.
 
 ## Testing
 
@@ -119,30 +115,17 @@ safely iterate on playbooks.
 ./test/test.sh stop           # Force stop and remove container
 ```
 
-## Multi-Distro Plan
-
-Eventually this repo will support multiple OS families. The approach:
-
-- **One playbook per distro**, kept to a single file (`playbooks/<distro>.yml`)
-- **Platform detection** in `bootstrap.sh` picks the right playbook
-- **Shared `stow/` packages** — configs that work identically everywhere
-- **Optional per-distro stow packages** — `stow-shell-ubuntu/`, `stow-shell-alpine/`, etc. for platform-specific configs
-
-Currently supported and planned:
+## Supported Platforms
 
 | Platform | Playbook              | Status    |
 |----------|-----------------------|-----------|
 | Ubuntu   | `playbooks/ubuntu.yml`| ✅ Current |
+| Debian   | `playbooks/ubuntu.yml`| ✅ Current |
 | Alpine   | `playbooks/alpine.yml`| 🔄 Planned |
+| Arch     | `playbooks/arch.yml`  | 🔄 Planned |
 | macOS    | `playbooks/macos.yml` | 🔄 Planned |
 
-Platform detection logic in `bootstrap.sh` (planned):
-
-```
-Linux + apt  →  playbooks/ubuntu.yml
-Linux + apk  →  playbooks/alpine.yml
-Darwin       →  playbooks/macos.yml
-```
+Platform detection is automatic — `dot boot` detects your OS and runs the appropriate playbook.
 
 ## Prerequisites
 
