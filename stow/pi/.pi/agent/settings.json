@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.66.1",
+  "lastChangelogVersion": "0.67.2",
   "enabledModels": [
     "openrouter/qwen/qwen3.6-plus",
     "openrouter/moonshotai/kimi-k2.5",
@@ -8,7 +8,7 @@
     "openrouter/stepfun/step-3.5-flash:free"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "qwen/qwen3.6-plus",
+  "defaultModel": "minimax/minimax-m2.7",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high"
 }

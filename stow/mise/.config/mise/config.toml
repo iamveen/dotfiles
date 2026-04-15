@@ -48,8 +48,11 @@ mermaid-ascii = "1.1.0"
 
 # Language Packages (npm, gem)
 "gem:try-cli" = "1.9.3"
-"npm:@anthropic-ai/claude-code" = "2.1.104"
-"npm:@mariozechner/pi-coding-agent" = "0.66.1"
+"npm:@anthropic-ai/claude-code" = "2.1.108"
+"npm:@mariozechner/pi-coding-agent" = "0.67.2"
+zellij = "latest"
+"cargo:flowmark" = "latest"
+prettier = "latest"
 
 [settings.ruby]
 compile = false
