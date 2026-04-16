@@ -7,52 +7,67 @@ OPENSPEC_TELEMETRY = 0
 
 [tools]
 # Languages / Runtimes
-node = "24"
-ruby = "3"
-rust = "1.94.1"
+node = "24"                    # JavaScript runtime
+ruby = "3"                    # Ruby language
+rust = "1.94.1"               # Rust language
 
 # Core CLI Tools
-bat = "0.26.1"
-delta = "0.19.2"
-eza = "0.23.4"
-fd = "10.4.2"
-jq = "1.8.1"
-ripgrep = "15.1.0"
-tree-sitter = "0.26.8"
+bat = "0.26.1"                # Syntax-highlighting cat
+delta = "0.19.2"              # Syntax-highlighting git diff pager
+eza = "0.23.4"                # Modern ls replacement
+fd = "10.4.2"                 # Fast find alternative
+jq = "1.8.1"                  # JSON processor
+ripgrep = "15.1.0"            # Fast recursive regex grep
+tree-sitter = "0.26.8"        # Incremental parsing library / CLI
 
 # Terminal & TUI Apps
-atuin = "18.13.6"
-btop = "1.4.6"
-fzf = "0.71.0"
-lazydocker = "0.25.0"
-lazygit = "0.61.0"
-lazyjournal = "0.8.6"
-neovim = "0.12.1"
-tmux = "3.6a"
-yazi = "26.1.22"
+atuin = "18.13.6"             # Shell history sync & search
+btop = "1.4.6"                # Resource monitor (CPU/mem/disk/net)
+fzf = "0.71.0"                # Fuzzy finder for shell
+lazydocker = "0.25.0"         # Docker TUI
+lazygit = "0.61.0"            # Git TUI
+lazyjournal = "0.8.6"         # Journalctl TUI
+neovim = "0.12.1"             # Modal text editor
+tmux = "3.6a"                 # Terminal multiplexer
+yazi = "26.1.22"              # Terminal file manager
 
 # Git & Version Control
-git-cliff = "2.12.0"
-gitleaks = "8.30.1"
-jj = "0.40.0"
+git-cliff = "2.12.0"          # Changelog generator from git tags
+gitleaks = "8.30.1"           # Secret detection in git repos
+jj = "0.40.0"                 # Git-compatible DVCS (Jujutsu)
 
 # Security & Analysis
-lychee = "0.23.0"
-tokei = "14.0.0"
-trivy = "0.69.3"
-vale = "3.14.1"
+lychee = "0.23.0"             # Link checker for markdown/HTML
+tokei = "14.0.0"              # Code statistics / LOC counter
+trivy = "0.69.3"              # Container & dependency vulnerability scanner
+vale = "3.14.1"               # Prose linter for style guides
 
 # Markdown & Writing
-glow = "2.1.2"
-mermaid-ascii = "1.1.0"
+glow = "2.1.2"                # Render markdown in the terminal
+mermaid-ascii = "1.1.0"       # Convert Mermaid diagrams to ASCII art
 
-# Language Packages (npm, gem)
-"gem:try-cli" = "1.9.3"
-"npm:@anthropic-ai/claude-code" = "2.1.108"
-"npm:@mariozechner/pi-coding-agent" = "0.67.2"
-zellij = "latest"
-"cargo:flowmark" = "latest"
-prettier = "latest"
+# Language Packages (npm, gem, cargo)
+"gem:try-cli" = "1.9.3"       # Ruby file organizer for try builds
+"npm:@anthropic-ai/claude-code" = "2.1.108"    # Claude Code CLI agent
+"npm:@mariozechner/pi-coding-agent" = "0.67.2" # Pi coding agent
+zellij = "latest"             # Terminal multiplexer Rust alternative
+"cargo:flowmark" = "latest"   # Markdown flowchart tool
+prettier = "latest"           # Opinionated code formatter
+
+# Code Search and Rewrite
+"aqua:ast-grep/ast-grep" = "0.42.1"    # AST-based code search and rewrite
+
+# Diff and Text Processing
+"aqua:Wilfred/difftastic" = "0.68.0"   # Structural diff (language-aware)
+"aqua:chmln/sd" = "1.1.0"              # Intuitive find and replace (sed alternative)
+"aqua:mikefarah/yq" = "4.52.5"          # YAML/JSON/XML/TOML processor
+
+# Shell Scripting
+"aqua:koalaman/shellcheck" = "0.11.0" # Static shell script analysis
+
+# Benchmarking and File Watching
+"aqua:sharkdp/hyperfine" = "1.20.0"    # Command-line benchmarking tool
+"aqua:watchexec/watchexec" = "2.5.1"   # Run commands on file changes
 
 [settings.ruby]
 compile = false

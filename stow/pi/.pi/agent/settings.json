@@ -3,12 +3,10 @@
   "enabledModels": [
     "openrouter/qwen/qwen3.6-plus",
     "openrouter/moonshotai/kimi-k2.5",
-    "openrouter/minimax/minimax-m2.7",
-    "openrouter/google/gemma-4-26b-a4b-it:free",
-    "openrouter/stepfun/step-3.5-flash:free"
+    "openrouter/minimax/minimax-m2.7"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "minimax/minimax-m2.7",
+  "defaultModel": "qwen/qwen3.6-plus",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high"
 }
