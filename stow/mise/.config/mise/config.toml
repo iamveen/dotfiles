@@ -21,11 +21,11 @@ ripgrep = "15.1.0"            # Fast recursive regex grep
 tree-sitter = "0.26.8"        # Incremental parsing library / CLI
 
 # Terminal & TUI Apps
-atuin = "18.13.6"             # Shell history sync & search
+atuin = "18.15.1"
 btop = "1.4.6"                # Resource monitor (CPU/mem/disk/net)
 fzf = "0.71.0"                # Fuzzy finder for shell
 lazydocker = "0.25.0"         # Docker TUI
-lazygit = "0.61.0"            # Git TUI
+lazygit = "0.61.1"
 lazyjournal = "0.8.6"         # Journalctl TUI
 neovim = "0.12.1"             # Modal text editor
 tmux = "3.6a"                 # Terminal multiplexer
@@ -48,8 +48,8 @@ mermaid-ascii = "1.1.0"       # Convert Mermaid diagrams to ASCII art
 
 # Language Packages (npm, gem, cargo)
 "gem:try-cli" = "1.9.3"       # Ruby file organizer for try builds
-"npm:@anthropic-ai/claude-code" = "2.1.108"    # Claude Code CLI agent
-"npm:@mariozechner/pi-coding-agent" = "0.67.2" # Pi coding agent
+"npm:@anthropic-ai/claude-code" = "2.1.111"
+"npm:@mariozechner/pi-coding-agent" = "0.67.5"
 zellij = "latest"             # Terminal multiplexer Rust alternative
 "cargo:flowmark" = "latest"   # Markdown flowchart tool
 prettier = "latest"           # Opinionated code formatter

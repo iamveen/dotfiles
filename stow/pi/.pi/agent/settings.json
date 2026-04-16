@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.67.2",
+  "lastChangelogVersion": "0.67.5",
   "enabledModels": [
     "openrouter/qwen/qwen3.6-plus",
     "openrouter/moonshotai/kimi-k2.5",
