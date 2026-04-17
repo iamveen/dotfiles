@@ -1,12 +1,15 @@
-{ ... }: {
+{ pkgs, ... }: {
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;
   };
   networking.firewall.allowedTCPPorts = [ 22 ];
 
+  programs.fish.enable = true;
+
   users.users.iamveen = {
     isNormalUser = true;
+    shell = pkgs.fish;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKHH7BNzLFwTQBWPNH0gZBYsTUOKxYpg7/mDP58rIxI+"
