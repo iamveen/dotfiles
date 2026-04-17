@@ -102,6 +102,14 @@ create_user() {
   fi
   echo "iamveen ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/iamveen
   chmod 440 /etc/sudoers.d/iamveen
+
+  SSH_DIR="/home/iamveen/.ssh"
+  mkdir -p "$SSH_DIR"
+  curl -fsSL https://github.com/iamveen.keys >> "$SSH_DIR/authorized_keys"
+  sort -u "$SSH_DIR/authorized_keys" -o "$SSH_DIR/authorized_keys"
+  chmod 700 "$SSH_DIR"
+  chmod 600 "$SSH_DIR/authorized_keys"
+  chown -R iamveen:iamveen "$SSH_DIR"
 }
 
 become_user() {
