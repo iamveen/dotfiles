@@ -1,12 +1,32 @@
 {
-  "lastChangelogVersion": "0.67.5",
+  "lastChangelogVersion": "0.68.0",
   "enabledModels": [
-    "openrouter/qwen/qwen3.6-plus",
-    "openrouter/moonshotai/kimi-k2.5",
-    "openrouter/minimax/minimax-m2.7"
+    "openrouter/qwen/qwen3.6-plus:exacto",
+    "openrouter/moonshotai/kimi-k2.6:exacto",
+    "openrouter/minimax/minimax-m2.7:exacto",
+    "openrouter/google/gemma-4-26b-a4b-it:exacto",
+    "openrouter/qwen/qwen3.5-27b:exacto"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "qwen/qwen3.6-plus",
+  "defaultModel": "moonshotai/kimi-k2.6:exacto",
   "hideThinkingBlock": false,
-  "defaultThinkingLevel": "high"
+  "defaultThinkingLevel": "high",
+  "enableInstallTelemetry": false,
+  "treeFilterMode": "user-only",
+  "theme": "light",
+  "packages": [
+    {
+      "source": "npm:@robhowley/pi-structured-return",
+      "extensions": [
+        "+extensions/structured-return/src/index.ts"
+      ]
+    },
+    "npm:pi-tool-display",
+    "npm:@alexanderfortin/pi-tavily-tools"
+  ],
+  "skills": [
+    "-skills/agent-browser/SKILL.md",
+    "-skills/caveman/SKILL.md",
+    "-skills/caveman-help/SKILL.md"
+  ]
 }

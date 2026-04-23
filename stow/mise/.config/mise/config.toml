@@ -2,6 +2,7 @@
 _.path = ["{{env.HOME}}/.dotfiles/bin"]
 OPENSPEC_TELEMETRY = 0
 
+
 # Secrets go in config.local.toml (gitignored)
 # OPENROUTER_API_KEY = "{{env.OPENROUTER_API_KEY}}"
 
@@ -21,10 +22,10 @@ ripgrep = "15.1.0"            # Fast recursive regex grep
 tree-sitter = "0.26.8"        # Incremental parsing library / CLI
 
 # Terminal & TUI Apps
-atuin = "18.15.1"
+atuin = "18.15.2"
 btop = "1.4.6"                # Resource monitor (CPU/mem/disk/net)
 fzf = "0.71.0"                # Fuzzy finder for shell
-lazydocker = "0.25.0"         # Docker TUI
+lazydocker = "0.25.2"
 lazygit = "0.61.1"
 lazyjournal = "0.8.6"         # Journalctl TUI
 neovim = "0.12.1"             # Modal text editor
@@ -44,12 +45,12 @@ vale = "3.14.1"               # Prose linter for style guides
 
 # Markdown & Writing
 glow = "2.1.2"                # Render markdown in the terminal
-mermaid-ascii = "1.1.0"       # Convert Mermaid diagrams to ASCII art
+mermaid-ascii = "1.2.0"
 
 # Language Packages (npm, gem, cargo)
 "gem:try-cli" = "1.9.3"       # Ruby file organizer for try builds
-"npm:@anthropic-ai/claude-code" = "2.1.111"
-"npm:@mariozechner/pi-coding-agent" = "0.67.5"
+"npm:@anthropic-ai/claude-code" = "2.1.116"
+"npm:@mariozechner/pi-coding-agent" = "0.68.0"
 zellij = "latest"             # Terminal multiplexer Rust alternative
 "cargo:flowmark" = "latest"   # Markdown flowchart tool
 prettier = "latest"           # Opinionated code formatter
@@ -60,7 +61,7 @@ prettier = "latest"           # Opinionated code formatter
 # Diff and Text Processing
 "aqua:Wilfred/difftastic" = "0.68.0"   # Structural diff (language-aware)
 "aqua:chmln/sd" = "1.1.0"              # Intuitive find and replace (sed alternative)
-"aqua:mikefarah/yq" = "4.52.5"          # YAML/JSON/XML/TOML processor
+"aqua:mikefarah/yq" = "4.53.2"
 
 # Shell Scripting
 "aqua:koalaman/shellcheck" = "0.11.0" # Static shell script analysis
@@ -68,6 +69,9 @@ prettier = "latest"           # Opinionated code formatter
 # Benchmarking and File Watching
 "aqua:sharkdp/hyperfine" = "1.20.0"    # Command-line benchmarking tool
 "aqua:watchexec/watchexec" = "2.5.1"   # Run commands on file changes
+github-cli = "latest"
+crush = "latest"
+"pipx:git-filter-repo" = "latest"
 
 [settings.ruby]
 compile = false

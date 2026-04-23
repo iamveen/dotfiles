@@ -1,0 +1,33 @@
+{
+  "providers": {
+    "openrouter": {
+      "models": [
+        {
+          "id": "qwen/qwen3.6-plus:exacto",
+          "name": "Qwen 3.6 Plus (Exacto)",
+          "api": "openai-completions"
+        },
+        {
+          "id": "moonshotai/kimi-k2.6:exacto",
+          "name": "Kimi K2.6 (Exacto)",
+          "api": "openai-completions"
+        },
+        {
+          "id": "minimax/minimax-m2.7:exacto",
+          "name": "MiniMax M2.7 (Exacto)",
+          "api": "openai-completions"
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it:exacto",
+          "name": "Gemma 4 26B (Exacto)",
+          "api": "openai-completions"
+        },
+        {
+          "id": "qwen/qwen3.5-27b:exacto",
+          "name": "Qwen 3.5 27B (Exacto)",
+          "api": "openai-completions"
+        }
+      ]
+    }
+  }
+}
