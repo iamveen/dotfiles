@@ -8,7 +8,7 @@
     "openrouter/qwen/qwen3.5-27b:exacto"
   ],
   "defaultProvider": "openrouter",
-  "defaultModel": "moonshotai/kimi-k2.6:exacto",
+  "defaultModel": "qwen/qwen3.6-plus:exacto",
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "high",
   "enableInstallTelemetry": false,
