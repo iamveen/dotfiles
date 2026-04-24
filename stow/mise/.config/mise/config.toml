@@ -72,6 +72,7 @@ prettier = "latest"           # Opinionated code formatter
 github-cli = "latest"
 crush = "latest"
 "pipx:git-filter-repo" = "latest"
+uv = "latest"
 
 [settings]
 lockfile = true
